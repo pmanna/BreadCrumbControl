@@ -128,12 +128,20 @@ public class CBreadcrumbControl: UIScrollView {
         }
     }
     
+    @IBInspectable public var arrowHeight: CGFloat = 16.0 {
+        didSet{
+            initialSetup(refresh: true)
+        }
+    }
+
+    /* Is it ever used?
     @IBInspectable public var iconSize: CGSize = CGSize(width:20, height:20){
         didSet{
             //setNeedsDisplay()
             initialSetup(refresh: true)
         }
     }
+    */
     
     // MARK: - Customizable properties.
     
@@ -282,6 +290,7 @@ public class CBreadcrumbControl: UIScrollView {
             button.styleButton = .simpleButton
             button.backgroundCustomColor = self.backgroundBCColor  //self.backgroundItemColor
             button.arrowColor = self.arrowColor
+            button.arrowHeight = self.arrowHeight
         }
         button.contentMode = .center
         button.titleLabel?.font = self.buttonFont
