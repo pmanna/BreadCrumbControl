@@ -77,7 +77,7 @@ public class CBreadcrumbControl: UIScrollView {
     
     @IBInspectable public var autoScrollEnabled: Bool = false
     
-    @IBInspectable public var visibleRootButton: Bool = true {
+    @IBInspectable public var visibleRootButton: Bool = false {
         didSet{
             initialSetup(refresh: true)
         }
@@ -208,9 +208,14 @@ public class CBreadcrumbControl: UIScrollView {
 
     private func setupViews() {
         self.clipsToBounds = true
+        var rectContainerView = CGRect(origin: CGPoint(x: 0, y: 0),
+                                       size: CGSize(width: self.bounds.size.width, height: self.frame.size.height))
+
+        if visibleRootButton {
+           rectContainerView = CGRect(origin: CGPoint(x: kStartButtonWidth+1, y: 0),
+                                      size: CGSize(width: self.bounds.size.width - (kStartButtonWidth+1), height: self.frame.size.height))
+        }
         
-        let rectContainerView = CGRect(origin: CGPoint(x: kStartButtonWidth + 1, y: 0),
-                                       size: CGSize(width: self.bounds.size.width - (kStartButtonWidth + 1), height: self.frame.size.height))
         let containerView = UIView(frame:rectContainerView)
         containerView.autoresizingMask = [.flexibleWidth]
         
@@ -247,10 +252,12 @@ public class CBreadcrumbControl: UIScrollView {
     {
         let button = UIButton(type: .custom) as UIButton
         button.backgroundColor = backgroundRootButtonColor
-        guard let bgImage = UIImage(named: "button_start", in: Bundle(for: type(of: self)), compatibleWith: nil) else {
-            fatalError("Root button's image is not created")
+        if let bgImage = UIImage(named: "breadCrumbRoot", in: Bundle(for: type(of: self)), compatibleWith: nil) {
+            button.setBackgroundImage(bgImage, for: .normal)
+        } else {
+            button.setTitle(NSLocalizedString("🏠", comment: "Root Button Name"), for: .normal)
+            button.setTitleColor(self.itemPrimaryColor, for: .normal)
         }
-        button.setBackgroundImage(bgImage, for: .normal)
         button.frame = CGRect(origin: CGPoint(x: 0, y: 0),
                               size: CGSize(width: kStartButtonWidth+1, height: self.frame.size.height))
         button.addTarget(self, action: #selector(self.pressed), for: .touchUpInside)
