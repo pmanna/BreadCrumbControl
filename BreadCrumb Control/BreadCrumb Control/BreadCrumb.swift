@@ -300,6 +300,7 @@ public class CBreadcrumbControl: UIScrollView {
             button.arrowHeight = self.arrowHeight
         }
         button.contentMode = .center
+		button.tag = position
         button.titleLabel?.font = self.buttonFont
         button.setTitle(item, for: .normal)
         button.setTitleColor( textBCColor, for: .normal)
@@ -322,8 +323,8 @@ public class CBreadcrumbControl: UIScrollView {
         if self.startButton != nil && self.startButton == sender {
             self.breadCrumbDelegate?.didTouchRootButton()
         } else {
-            if let clickedButtonTitle = sender.titleLabel?.text,
-                let index = self._items.index(of: clickedButtonTitle) {
+			if let clickedButtonTitle = sender.titleLabel?.text {
+                let index = sender.tag
                 self.breadCrumbDelegate?.didTouchItem(index: index, item: clickedButtonTitle)
             }
         }
